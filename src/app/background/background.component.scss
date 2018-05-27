@@ -1,0 +1,15 @@
+.grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(100, 10px);
+    grid-column-gap: 0;
+    width: 1000px;
+    height: 500px;
+    z-index: 100;
+    .item {
+        background: yellow;
+        border: 1px solid orange;
+        width: 10px;
+        height: 10px;
+    }
+}

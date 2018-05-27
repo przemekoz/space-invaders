@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "styles.variables.scss";
+
+html, * {
+    margin: 0;
+    padding: 0;
+}
+
+.toolbar-spacer {
+    flex: 1 1 auto;
+    height: 10px;
+}
+
+.container-left-right {
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+}
