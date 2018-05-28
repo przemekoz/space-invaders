@@ -1,0 +1,33 @@
+<div class="grid">
+    <div class="item" *ngFor="let col of columns"></div>
+    <app-enemy *ngFor="let enemy of enemies" [posx]="enemy.posx" [posy]="enemy.posy"></app-enemy>
+
+    <!-- DEBUG -->
+    enemy:
+    {{ enemy.shoot.pos | json }}
+
+    my:
+    {{ my.shoot.pos | json }}
+
+    <app-shoot 
+        [(pos)]="enemy.shoot.pos" 
+        [startPosY]="enemy.shoot.startY" 
+        [stopPosY]="enemy.shoot.stopY" 
+        *ngIf="enemy.shoot.pos.x > 0"></app-shoot>
+
+    <app-shoot 
+        [(pos)]="my.shoot.pos" 
+        [startPosY]="my.shoot.startY" 
+        [stopPosY]="my.shoot.stopY" 
+        mode="decrement"
+        *ngIf="my.shoot.pos.x > 0"></app-shoot>
+
+
+</div>
+
+------------------------------------------------------------
+
+<button (click)="makeShoot()">shoot!</button>
+
+<button (click)="left()">&lt; move left!</button>
+<button (click)="right()">&gt; move left!</button>

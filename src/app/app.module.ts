@@ -9,18 +9,20 @@ import { HomePageComponent } from './home-page/home-page.component';
 // provider used to create fake backend
 import { AlertService } from './services/alert.service';
 import { LayoutModule } from '@angular/cdk/layout';
-import { BackgroundComponent } from './background/background.component';
 import { EnemyComponent } from './enemy/enemy.component';
 import { ShootComponent } from './shoot/shoot.component';
+import { CoordinateurComponent } from './coordinateur/coordinateur.component';
+import { MyShipComponent } from './my-ship/my-ship.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
-        BackgroundComponent,
+        CoordinateurComponent,
         EnemyComponent,
-        ShootComponent
+        ShootComponent,
+        MyShipComponent
     ],
     imports: [
         BrowserModule,

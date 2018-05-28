@@ -1,9 +1,0 @@
-<div class="grid">
-    <div class="item" *ngFor="let col of columns"></div>
-    <app-enemy *ngFor="let enemy of enemies" [posx]="enemy.posx" [posy]="enemy.posy"></app-enemy>
-
-    <!-- DEBUG -->
-    {{ currentShootPos | json }}
-
-    <app-shoot [startPosY]="shootStartPosY" [stopPosY]="shootStopPosY" [posx]="shoot.posx" *ngIf="shoot.posx" (currentPos)="currentShootPos=$event"></app-shoot>
-</div>

@@ -1,35 +1,49 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { CONF } from '../conf/conf.const';
 
 @Component({
     selector: 'app-shoot',
-    template: `<div class="shoot" [ngStyle]="{'top': posy + 'px', 'left': posx + 'px', 'display': display}"></div>`,
+    template: `<div class="shoot"
+        [ngStyle]="{'left': pos.x + 'px', 'top': pos.y + 'px', 'display': display, 'width': width + 'px', 'height': height + 'px'}">
+        </div>`,
     styleUrls: ['./shoot.component.scss']
 })
 export class ShootComponent implements OnInit, OnDestroy {
 
-    posy = 0;
+    height = 0;
+    width = 0;
     display = 'none';
     private interval: any;
 
-    @Input() posx = 0;
     @Input() startPosY = 0;
     @Input() stopPosY = 0;
+    @Input() mode = 'increment';
+    @Input() pos: any = { x: 0, y: 0 };
     @Output() currentPos = new EventEmitter<number[]>();
 
-    constructor() { }
+    constructor() {
+        this.width = CONF.shoot.width;
+        this.height = CONF.shoot.height;
+    }
 
     ngOnInit() {
-        this.posy = this.startPosY;
         this.interval = setInterval(() => {
-            console.log(this.posx)
             this.display = 'block';
-            this.posy += 10;
-            this.currentPos.emit([this.posx, this.posy]);
-            if (this.posy > this.stopPosY) {
-                this.display = 'none';
-                this.posy = this.startPosY;
+            if (this.mode === 'increment') {
+                this.pos.y += CONF.frame.height;
+                if (this.pos.y > this.stopPosY) {
+                    this.pos.y = this.startPosY;
+                    this.display = 'none';
+                }
+            } else {
+                this.pos.y -= CONF.frame.height;
+                if (this.pos.y < this.stopPosY) {
+                    this.pos.y = this.startPosY;
+                    this.display = 'none';
+                }
             }
-        }, 150);
+            this.currentPos.emit(this.pos);
+        }, CONF.shoot.moveInterval);
     }
 
     ngOnDestroy() {
