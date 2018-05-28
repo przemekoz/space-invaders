@@ -11,9 +11,10 @@ export const CONF = {
     shoot: {
         width: 10,
         height: 20,
-        moveInterval: 500
+        moveInterval: 100
     },
     enemy: {
+        width: 30,
         count: 10,
         moveInterval: 700
     }

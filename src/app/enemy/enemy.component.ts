@@ -3,13 +3,14 @@ import { Enemies } from '../interfaces/enemies';
 
 @Component({
     selector: 'app-enemy',
-    template: `<div class="enemy" [ngStyle]="{'top': posy + 'px', 'left': posx + 'px'}"></div>`,
+    template: `<div class="enemy" *ngIf="visible" [ngStyle]="{'top': posy + 'px', 'left': posx + 'px'}"></div>`,
     styleUrls: ['./enemy.component.scss']
 })
 export class EnemyComponent implements OnInit, Enemies {
 
     @Input() posx = 0;
     @Input() posy = 0;
+    @Input() visible = true;
 
     constructor() { }
 

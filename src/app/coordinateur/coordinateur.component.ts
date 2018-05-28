@@ -11,6 +11,7 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
 
     private countOfEnemies: number;
     private intervals: any[] = [];
+    private killedIndex: number[] = [];
 
     my: any = {};
     enemy: any = {};
@@ -77,7 +78,6 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
                 // choose random enemy
                 const randIndex = Math.floor((Math.random() * this.countOfEnemies)); // 0..countOfEnemies
                 this.enemy.shoot.pos.x = this.enemies[randIndex].posx + 10;
-                this.enemy.shoot.pos.x = 160;
             }
 
             // if enemy shoot "meet" my shoot
@@ -88,8 +88,20 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
                 this.initEnemyShoot();
             }
 
-            // if my shoot was "blind"
             if (this.my.shoot.pos.y === CONF.main.topY) {
+                console.log(this.my.shoot.pos.y)
+                // on target !
+                const foundedEnemyIndex = this.enemies.findIndex(enemy => {
+                    console.log(enemy, enemy.posx, this.my.shoot.pos.x, enemy.posx - this.my.shoot.pos.x, CONF.enemy.width)
+                    return enemy.posx - this.my.shoot.pos.x >= 0 && enemy.posx - this.my.shoot.pos.x <= CONF.enemy.width;
+                });
+                if (foundedEnemyIndex > -1) {
+                    this.enemies[foundedEnemyIndex].visible = false;
+                    this.killedIndex.push(foundedEnemyIndex);
+                    console.log('enemy killed!');
+                }
+
+                // if my shoot was "blind"
                 this.initMyShoot();
             }
         }, CONF.main.checkingInterval);
@@ -102,7 +114,8 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
         for (let i = 0; i < this.countOfEnemies; i++) {
             this.enemies.push({
                 posx: startX + (i * 50),
-                posy: 10
+                posy: 10,
+                visible: this.killedIndex.includes(i) === false
             });
         }
     }
