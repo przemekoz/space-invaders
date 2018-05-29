@@ -12,6 +12,7 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
     private countOfEnemies: number;
     private intervals: any[] = [];
     private killedIndex: number[] = [];
+    private leftMargin = 30;
 
     my: any = {};
     enemy: any = {};
@@ -76,8 +77,14 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
             // generate enemy shoots
             if (this.enemy.shoot.pos.y === CONF.main.topY || this.enemy.shoot.pos.y > CONF.main.bottomY) {
                 // choose random enemy
-                const randIndex = Math.floor((Math.random() * this.countOfEnemies)); // 0..countOfEnemies
-                this.enemy.shoot.pos.x = this.enemies[randIndex].posx + 10;
+                let randIndex = -1;
+                for (let i = 0; i < this.countOfEnemies; i++) {
+                    randIndex = Math.floor((Math.random() * this.countOfEnemies)); // 0..countOfEnemies
+                    if (this.enemies[randIndex].visible) {
+                        break;
+                    }
+                }
+                this.enemy.shoot.pos.x = this.enemies[randIndex].posx + 10; // @todo + or -
             }
 
             // if enemy shoot "meet" my shoot
@@ -89,20 +96,30 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
             }
 
             if (this.my.shoot.pos.y === CONF.main.topY) {
-                console.log(this.my.shoot.pos.y)
-                // on target !
+                // on target !d
                 const foundedEnemyIndex = this.enemies.findIndex(enemy => {
-                    console.log(enemy, enemy.posx, this.my.shoot.pos.x, enemy.posx - this.my.shoot.pos.x, CONF.enemy.width)
-                    return enemy.posx - this.my.shoot.pos.x >= 0 && enemy.posx - this.my.shoot.pos.x <= CONF.enemy.width;
+                    return enemy.visible === true &&
+                        enemy.posx + this.leftMargin - this.my.shoot.pos.x >= 0 &&
+                        enemy.posx + this.leftMargin - this.my.shoot.pos.x <= CONF.enemy.width;
                 });
                 if (foundedEnemyIndex > -1) {
+                    console.log(foundedEnemyIndex)
+                    // console.log(enemy, enemy.posx, this.my.shoot.pos.x, enemy.posx - this.my.shoot.pos.x, CONF.enemy.width)
+
                     this.enemies[foundedEnemyIndex].visible = false;
                     this.killedIndex.push(foundedEnemyIndex);
                     console.log('enemy killed!');
+                } else {
+                    console.log('not killed :(');
+                    console.log(this.my.shoot)
+                    this.enemies.forEach(enemy => {
+                        console.log(enemy)
+                    });
+
+                    // if my shoot was "blind"
+                    // this.initMyShoot();
                 }
 
-                // if my shoot was "blind"
-                this.initMyShoot();
             }
         }, CONF.main.checkingInterval);
         this.intervals.push(int1);
@@ -110,7 +127,7 @@ export class CoordinateurComponent implements OnInit, OnDestroy {
 
     private generateEnemies(offset: number) {
         this.enemies = [];
-        const startX = 30 + offset;
+        const startX = this.leftMargin + offset;
         for (let i = 0; i < this.countOfEnemies; i++) {
             this.enemies.push({
                 posx: startX + (i * 50),
